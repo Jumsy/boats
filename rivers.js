@@ -5,6 +5,7 @@ var rows = process.stdout.rows
 var river = ''
 var rocks = []
 var boat = {x: 10, y: 10, design: '[88>'};
+var screen = {x: 0, y: 0}
 var j, i
 
 for(j=0;j<cols;j++)
@@ -20,7 +21,10 @@ function makeRock(x,y) {
 
 function drawRocks() {
   rocks.forEach(function(r) {
-    charm.position(r.x, r.y)
+    if(r.x < screen.x)
+      return;
+    var pos = {x: (r.x - screen.x), y: (r.y  - screen.y)}
+    charm.position(pos.x, pos.y)
     charm.background('cyan')
     charm.foreground('white')
     charm.write('0')
@@ -42,7 +46,7 @@ function writeBoat() {
   charm.erase('screen');
   drawRiver()
   console.log(boat)
-  charm.position(boat.x,boat.y)
+  charm.position(boat.x - screen.x, boat.y - screen.y)
   charm.left()
   charm.foreground('magenta')
   charm.write(boat.design)
@@ -71,6 +75,11 @@ shortcut('l', function() {
 shortcut('c', process.exit)
 process.stdin.setRawMode(true)
 process.stdin.resume()
+
+setInterval(function moveScreen() {
+  screen.x = screen.x + 1
+  writeBoat()
+}, 500)
 
 setInterval(function() {
   boat.x = boat.x - 1
