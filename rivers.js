@@ -73,7 +73,7 @@ function writeBoat() {
 
 function checkCollision() {
   for (var r in rocks) {
-    if((rocks[r].x - boat.x) < boat.design.length
+    if((rocks[r].x >= boat.x && (boat.design.length + boat.x) >= rocks[r].x)
       && (rocks[r].y === boat.y))
       boat.status = 'sunk'
   }
