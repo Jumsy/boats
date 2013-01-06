@@ -7,6 +7,7 @@ var rocks = []
 var boat = {x: 10, y: 8, design: '[88>', status: 'floating'};
 var screen = {x: 0, y: 0}
 var j, i
+var pause = false
 
 for(j=0;j<cols;j++)
   river += '}';
@@ -99,17 +100,25 @@ shortcut('l', function() {
       boat.x += 1;
     writeBoat();
 })
+shortcut('p', function() {
+    if(pause)
+      pause = false;
+    else
+      pause = true;
+})
 
-shortcut('c', process.exit)
+shortcut('c, ctrl+c', process.exit)
 process.stdin.setRawMode(true)
 process.stdin.resume()
 
 setInterval(function moveScreen() {
-  screen.x = screen.x + 1
+  if (!pause)
+    screen.x = screen.x + 1
   writeBoat()
 }, 1500)
 
 setInterval(function() {
-  boat.x = boat.x - 1
+  if(!pause)
+    boat.x = boat.x - 1
   writeBoat();
 }, 750)
