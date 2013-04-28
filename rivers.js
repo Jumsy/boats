@@ -46,6 +46,12 @@ function drawRiver() {
   charm.position(0, rows-1)
 }
 
+//function drawEnv() {
+    //shoreWidth = 5
+    //topShore = shoreWidth;
+    //botShore = rows-shoreWidth;
+//}
+
 function writeBoat() {
   charm.erase('screen');
   drawRiver()
@@ -80,31 +86,31 @@ function checkCollision() {
   }
 }
 
+function moveBoat(x, y) {
+    if (boat.status == 'sunk') { return; }
+    boat.x += x
+    boat.y += y
+}
+
 shortcut('h', function() {
-    if(boat.status !== 'sunk')
-      boat.x = boat.x - 1;
+    moveBoat(-1, 0);
     writeBoat();
 })
 shortcut('j', function() {
-    if(boat.status !== 'sunk')
-      boat.y += 1;
+    moveBoat(0, 1);
     writeBoat();
 })
 shortcut('k', function() {
-    if(boat.status !== 'sunk')
-      boat.y = boat.y - 1;
+    moveBoat(0, -1);
     writeBoat();
 })
 shortcut('l', function() {
-    if(boat.status !== 'sunk')
-      boat.x += 1;
+    moveBoat(1, 0);
     writeBoat();
 })
 shortcut('p', function() {
-    if(pause)
-      pause = false;
-    else
-      pause = true;
+    pause = pause ? false : true;
+    //pause = pause == false
 })
 
 shortcut('c, ctrl+c', process.exit)
@@ -118,7 +124,7 @@ setInterval(function moveScreen() {
 }, 1500)
 
 setInterval(function() {
-  if(!pause)
-    boat.x = boat.x - 1
+  if(!pause && boat.status !== 'sunk') // Sunken boats don't drift!
+    boat.x -= 1
   writeBoat();
 }, 750)
